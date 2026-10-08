@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOD &amp; DIV in Programming – Interactive Applications</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="header-content">
+          <div class="header-badge">Computer Science Fundamentals</div>
+          <h1>MOD &amp; DIV Interactive Demonstrator</h1>
+          <p class="header-subtitle">
+            Explore real-world programming applications using <strong>Integer Division (DIV)</strong> and <strong>Modulo (MOD)</strong> operations.
+          </p>
+        </div>
+        <button type="button" id="header-hint-toggle" class="btn-concept-hint" aria-expanded="false" aria-controls="header-concept-panel">
+          <span class="hint-icon">💡</span>
+          <span class="hint-btn-text">How DIV &amp; MOD Work</span>
+          <span class="hint-chevron">▼</span>
+        </button>
+      </div>
+
+      <!-- Quick concept banner (hidden behind hint button by default) -->
+      <div id="header-concept-panel" class="concept-pills hidden">
+        <div class="concept-pill pill-div">
+          <span class="pill-label">DIV (//)</span>
+          <span class="pill-desc">Calculates whole quotient (how many times a number fits completely without decimals)</span>
+        </div>
+        <div class="concept-pill pill-mod">
+          <span class="pill-label">MOD (%)</span>
+          <span class="pill-desc">Calculates the remainder left over after division</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="program-nav" aria-label="Program Selector">
+      <button class="nav-tab active" data-program="p1" id="tab-p1" role="tab" aria-selected="true" aria-controls="view-p1">
+        <span class="tab-index">1</span>
+        <span class="tab-text">
+          <span class="tab-title">Even or Odd</span>
+          <span class="tab-op">MOD (%)</span>
+        </span>
+      </button>
+
+      <button class="nav-tab" data-program="p2" id="tab-p2" role="tab" aria-selected="false" aria-controls="view-p2">
+        <span class="tab-index">2</span>
+        <span class="tab-text">
+          <span class="tab-title">Sharing Sweets</span>
+          <span class="tab-op">DIV (//) &amp; MOD (%)</span>
+        </span>
+      </button>
+
+      <button class="nav-tab" data-program="p3" id="tab-p3" role="tab" aria-selected="false" aria-controls="view-p3">
+        <span class="tab-index">3</span>
+        <span class="tab-text">
+          <span class="tab-title">Car Park Charges</span>
+          <span class="tab-op">DIV (//) &amp; MOD (%)</span>
+        </span>
+      </button>
+
+      <button class="nav-tab" data-program="p4" id="tab-p4" role="tab" aria-selected="false" aria-controls="view-p4">
+        <span class="tab-index">4</span>
+        <span class="tab-text">
+          <span class="tab-title">ATM Cash Dispenser</span>
+          <span class="tab-op">DIV (//) &amp; MOD (%)</span>
+        </span>
+      </button>
+
+      <button class="nav-tab" data-program="p5" id="tab-p5" role="tab" aria-selected="false" aria-controls="view-p5">
+        <span class="tab-index">5</span>
+        <span class="tab-text">
+          <span class="tab-title">Time Converter</span>
+          <span class="tab-op">DIV (//) &amp; MOD (%)</span>
+        </span>
+      </button>
+    </nav>
+
+    <!-- Program Views Container -->
+    <main class="program-container">
+
+      <!-- ================= PROGRAM 1 ================= -->
+      <section class="program-view active" id="view-p1" role="tabpanel" aria-labelledby="tab-p1">
+        <div class="scenario-card">
+          <div class="scenario-meta">
+            <span class="scenario-tag">Program 1</span>
+            <span class="scenario-operator">Operator: MOD (%)</span>
+          </div>
+          <h2>Python Coding Challenge – Even or Odd Number</h2>
+          <p class="scenario-text">
+            <strong>Scenario:</strong> Enter a whole number to determine whether it is <strong>even</strong> or <strong>odd</strong> using the MOD operator.
+          </p>
+        </div>
+
+        <div class="workspace-grid">
+          <!-- Input Form Panel -->
+          <div class="card form-panel">
+            <h3 class="panel-heading">Enter Input</h3>
+            <form id="form-p1" class="app-form" onsubmit="return false;">
+              <div class="form-group">
+                <label for="p1-number">Whole Number:</label>
+                <input 
+                  type="number" 
+                  id="p1-number" 
+                  name="number" 
+                  placeholder="e.g. 42, 17, 0" 
+                  step="1" 
+                  value="17" 
+                  required
+                >
+                <span class="field-hint">Any positive or negative whole number</span>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="presets-section">
+                <span class="presets-label">Quick Examples:</span>
+                <div class="preset-buttons">
+                  <button type="button" class="preset-btn" data-target="p1" data-val="17">17</button>
+                  <button type="button" class="preset-btn" data-target="p1" data-val="24">24</button>
+                  <button type="button" class="preset-btn" data-target="p1" data-val="0">0</button>
+                  <button type="button" class="preset-btn" data-target="p1" data-val="101">101</button>
+                  <button type="button" class="preset-btn" data-target="p1" data-val="-8">-8</button>
+                </div>
+              </div>
+
+              <div class="action-buttons">
+                <button type="button" id="p1-submit" class="btn btn-primary">Check Even or Odd</button>
+                <button type="button" id="p1-reset" class="btn btn-secondary">Clear</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Output Display Panel -->
+          <div class="card result-panel">
+            <h3 class="panel-heading">Application Output</h3>
+            <div id="p1-result" class="result-box">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Extension Tasks -->
+        <div class="card extension-card">
+          <div class="extension-header">
+            <span class="extension-badge">Extension Task</span>
+            <h3 class="extension-title">Student Extension Challenge</h3>
+          </div>
+          <div class="extension-content">
+            <div class="extension-item">
+              <p><strong>Random Number Generator:</strong> Generate a random number between 1 and 100 and determine whether it is even or odd.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PROGRAM 2 ================= -->
+      <section class="program-view" id="view-p2" role="tabpanel" aria-labelledby="tab-p2">
+        <div class="scenario-card">
+          <div class="scenario-meta">
+            <span class="scenario-tag">Program 2</span>
+            <span class="scenario-operator">Operators: DIV (//) &amp; MOD (%)</span>
+          </div>
+          <h2>Python Coding Challenge – Sharing Sweets</h2>
+          <p class="scenario-text">
+            <strong>Scenario:</strong> A teacher has sweets to share equally between students.
+            Calculates how many sweets each student receives and how many remain after sharing.
+          </p>
+          <div class="scenario-challenge-box">
+            <strong>Default Challenge:</strong> 25 sweets shared equally between 4 students.
+          </div>
+        </div>
+
+        <div class="workspace-grid">
+          <!-- Input Form Panel -->
+          <div class="card form-panel">
+            <h3 class="panel-heading">Sweet Sharing Details</h3>
+            <form id="form-p2" class="app-form" onsubmit="return false;">
+              <div class="form-group">
+                <label for="p2-sweets">Total Number of Sweets:</label>
+                <input 
+                  type="number" 
+                  id="p2-sweets" 
+                  name="sweets" 
+                  placeholder="e.g. 25" 
+                  min="0" 
+                  step="1" 
+                  value="25" 
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="p2-students">Number of Students:</label>
+                <input 
+                  type="number" 
+                  id="p2-students" 
+                  name="students" 
+                  placeholder="e.g. 4" 
+                  min="1" 
+                  step="1" 
+                  value="4" 
+                  required
+                >
+                <span class="field-hint">Must be at least 1 student</span>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="presets-section">
+                <span class="presets-label">Preset Scenarios:</span>
+                <div class="preset-buttons">
+                  <button type="button" class="preset-btn" data-target="p2" data-sweets="25" data-students="4">Challenge (25 sweets, 4 students)</button>
+                  <button type="button" class="preset-btn" data-target="p2" data-sweets="30" data-students="5">Exact share (30 sweets, 5 students)</button>
+                  <button type="button" class="preset-btn" data-target="p2" data-sweets="10" data-students="3">10 sweets, 3 students</button>
+                  <button type="button" class="preset-btn" data-target="p2" data-sweets="3" data-students="8">More students than sweets (3 sweets, 8 students)</button>
+                </div>
+              </div>
+
+              <div class="action-buttons">
+                <button type="button" id="p2-submit" class="btn btn-primary">Calculate Sharing</button>
+                <button type="button" id="p2-reset" class="btn btn-secondary">Reset to Default (25 &amp; 4)</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Output Display Panel -->
+          <div class="card result-panel">
+            <h3 class="panel-heading">Sharing Results</h3>
+            <div id="p2-result" class="result-box">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Extension Tasks -->
+        <div class="card extension-card">
+          <div class="extension-header">
+            <span class="extension-badge">Extension Challenges</span>
+            <h3 class="extension-title">Student Extension Tasks</h3>
+          </div>
+          <div class="extension-content">
+            <ol class="extension-list">
+              <li><strong>User Input:</strong> Allow the user to enter the number of sweets and students.</li>
+              <li><strong>Validation:</strong> Prevent the user from entering zero students or negative numbers.</li>
+              <li><strong>Extra Sweets:</strong> Determine how many additional sweets are needed so every student receives one more sweet.</li>
+              <li><strong>Repeated Calculations:</strong> Use a while loop to allow the teacher to repeat the calculation.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PROGRAM 3 ================= -->
+      <section class="program-view" id="view-p3" role="tabpanel" aria-labelledby="tab-p3">
+        <div class="scenario-card">
+          <div class="scenario-meta">
+            <span class="scenario-tag">Program 3</span>
+            <span class="scenario-operator">Operators: DIV (//) &amp; MOD (%)</span>
+          </div>
+          <h2>Python Coding Challenge – Car Park Charges</h2>
+          <p class="scenario-text">
+            <strong>Scenario:</strong> A car park charges £2 for every hour or part of an hour.
+            Enter how many minutes parked to calculate the total parking charge.
+          </p>
+          <div class="rules-badge-group">
+            <span class="rule-badge">0 mins = £0</span>
+            <span class="rule-badge">1–60 mins = £2</span>
+            <span class="rule-badge">61–120 mins = £4</span>
+            <span class="rule-badge">Every started hour = £2</span>
+          </div>
+        </div>
+
+        <div class="workspace-grid">
+          <!-- Input Form Panel -->
+          <div class="card form-panel">
+            <h3 class="panel-heading">Parking Duration</h3>
+            <form id="form-p3" class="app-form" onsubmit="return false;">
+              <div class="form-group">
+                <label for="p3-minutes">Total Parking Time (Minutes):</label>
+                <input 
+                  type="number" 
+                  id="p3-minutes" 
+                  name="minutes" 
+                  placeholder="e.g. 75" 
+                  min="0" 
+                  step="1" 
+                  value="75" 
+                  required
+                >
+                <span class="field-hint">Enter 0 or any positive whole number</span>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="presets-section">
+                <span class="presets-label">Test Times:</span>
+                <div class="preset-buttons">
+                  <button type="button" class="preset-btn" data-target="p3" data-val="0">0 mins (£0)</button>
+                  <button type="button" class="preset-btn" data-target="p3" data-val="45">45 mins (£2)</button>
+                  <button type="button" class="preset-btn" data-target="p3" data-val="60">60 mins (£2)</button>
+                  <button type="button" class="preset-btn" data-target="p3" data-val="75">75 mins (£4)</button>
+                  <button type="button" class="preset-btn" data-target="p3" data-val="120">120 mins (£4)</button>
+                  <button type="button" class="preset-btn" data-target="p3" data-val="125">125 mins (£6)</button>
+                  <button type="button" class="preset-btn" data-target="p3" data-val="181">181 mins (£8)</button>
+                </div>
+              </div>
+
+              <div class="action-buttons">
+                <button type="button" id="p3-submit" class="btn btn-primary">Calculate Charge</button>
+                <button type="button" id="p3-reset" class="btn btn-secondary">Clear</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Output Display Panel -->
+          <div class="card result-panel">
+            <h3 class="panel-heading">Ticket Summary</h3>
+            <div id="p3-result" class="result-box">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Extension Tasks -->
+        <div class="card extension-card">
+          <div class="extension-header">
+            <span class="extension-badge">Extension Challenges</span>
+            <h3 class="extension-title">Student Extension Tasks</h3>
+          </div>
+          <div class="extension-content">
+            <ol class="extension-list">
+              <li><strong>Maximum daily charge:</strong> The car park has a maximum charge of £12 for up to 24 hours.</li>
+              <li><strong>Free parking:</strong> The first 15 minutes are free. After 15 minutes, the normal hourly charge applies to the full parking duration.</li>
+              <li><strong>Weekend pricing:</strong> Parking costs £3 per started hour on Saturday and Sunday.</li>
+              <li><strong>Lost ticket:</strong> Customers who lose their ticket must pay a fixed charge of £20.</li>
+              <li><strong>Multiple customers:</strong> Use a while loop to calculate charges for multiple vehicles and keep a running total of money collected.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PROGRAM 4 ================= -->
+      <section class="program-view" id="view-p4" role="tabpanel" aria-labelledby="tab-p4">
+        <div class="scenario-card">
+          <div class="scenario-meta">
+            <span class="scenario-tag">Program 4</span>
+            <span class="scenario-operator">Operators: DIV (//) &amp; MOD (%)</span>
+          </div>
+          <h2>Python – ATM Cash Dispenser</h2>
+          <p class="scenario-text">
+            <strong>Scenario:</strong> An ATM calculates how many <strong>£20</strong>, <strong>£10</strong> and <strong>£5</strong> notes are required to dispense a requested withdrawal.
+            The ATM dispenses the largest available notes first to minimise the total number of banknotes.
+          </p>
+        </div>
+
+        <div class="workspace-grid">
+          <!-- Input Form Panel -->
+          <div class="card form-panel">
+            <h3 class="panel-heading">Withdrawal Amount</h3>
+            <form id="form-p4" class="app-form" onsubmit="return false;">
+              <div class="form-group">
+                <label for="p4-amount">Requested Cash Amount (£):</label>
+                <div class="currency-input-wrapper">
+                  <span class="currency-symbol">£</span>
+                  <input 
+                    type="number" 
+                    id="p4-amount" 
+                    name="amount" 
+                    placeholder="e.g. 75" 
+                    min="5" 
+                    step="5" 
+                    value="75" 
+                    required
+                  >
+                </div>
+                <span class="field-hint">Must be in multiples of £5 (Available: £20, £10, £5 notes)</span>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="presets-section">
+                <span class="presets-label">Quick Amounts:</span>
+                <div class="preset-buttons">
+                  <button type="button" class="preset-btn" data-target="p4" data-val="25">£25</button>
+                  <button type="button" class="preset-btn" data-target="p4" data-val="50">£50</button>
+                  <button type="button" class="preset-btn" data-target="p4" data-val="75">£75</button>
+                  <button type="button" class="preset-btn" data-target="p4" data-val="95">£95</button>
+                  <button type="button" class="preset-btn" data-target="p4" data-val="135">£135</button>
+                  <button type="button" class="preset-btn" data-target="p4" data-val="280">£280</button>
+                </div>
+              </div>
+
+              <div class="action-buttons">
+                <button type="button" id="p4-submit" class="btn btn-primary">Dispense Cash</button>
+                <button type="button" id="p4-reset" class="btn btn-secondary">Clear</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Output Display Panel -->
+          <div class="card result-panel">
+            <h3 class="panel-heading">Dispense Breakdown</h3>
+            <div id="p4-result" class="result-box">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Extension Tasks -->
+        <div class="card extension-card">
+          <div class="extension-header">
+            <span class="extension-badge">Extension Challenges</span>
+            <h3 class="extension-title">Student Extension Challenges</h3>
+          </div>
+          <div class="extension-content">
+            <ol class="extension-list">
+              <li><strong>Maximum withdrawal:</strong> The ATM cannot dispense more than £300 in one transaction.</li>
+              <li><strong>Account balance:</strong> Ask for the customer's balance and prevent withdrawals exceeding it.</li>
+              <li><strong>Stock management:</strong> The ATM contains a limited number of each note. Check whether it can dispense the requested amount.</li>
+              <li><strong>Repeat transactions:</strong> Use a while loop so customers can make multiple withdrawals.</li>
+              <li><strong>Receipt:</strong> Display the withdrawal amount, number of notes dispensed and remaining account balance.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PROGRAM 5 ================= -->
+      <section class="program-view" id="view-p5" role="tabpanel" aria-labelledby="tab-p5">
+        <div class="scenario-card">
+          <div class="scenario-meta">
+            <span class="scenario-tag">Program 5</span>
+            <span class="scenario-operator">Operators: DIV (//) &amp; MOD (%)</span>
+          </div>
+          <h2>Python Coding Challenge – Time Converter</h2>
+          <p class="scenario-text">
+            <strong>Scenario:</strong> A fitness application records total exercise time in seconds.
+            Converts the total seconds into <strong>hours</strong>, <strong>minutes</strong>, and <strong>seconds</strong> using DIV (//) and MOD (%).
+          </p>
+        </div>
+
+        <div class="workspace-grid">
+          <!-- Input Form Panel -->
+          <div class="card form-panel">
+            <h3 class="panel-heading">Exercise Duration</h3>
+            <form id="form-p5" class="app-form" onsubmit="return false;">
+              <div class="form-group">
+                <label for="p5-seconds">Total Time Recorded (Seconds):</label>
+                <input 
+                  type="number" 
+                  id="p5-seconds" 
+                  name="seconds" 
+                  placeholder="e.g. 3665" 
+                  min="0" 
+                  step="1" 
+                  value="3665" 
+                  required
+                >
+                <span class="field-hint">Whole seconds (e.g. 60s = 1m, 3600s = 1h)</span>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="presets-section">
+                <span class="presets-label">Quick Times:</span>
+                <div class="preset-buttons">
+                  <button type="button" class="preset-btn" data-target="p5" data-val="45">45s</button>
+                  <button type="button" class="preset-btn" data-target="p5" data-val="300">300s (5m)</button>
+                  <button type="button" class="preset-btn" data-target="p5" data-val="3600">3600s (1h)</button>
+                  <button type="button" class="preset-btn" data-target="p5" data-val="3665">3665s (1h 1m 5s)</button>
+                  <button type="button" class="preset-btn" data-target="p5" data-val="5000">5000s</button>
+                  <button type="button" class="preset-btn" data-target="p5" data-val="7322">7322s</button>
+                </div>
+              </div>
+
+              <div class="action-buttons">
+                <button type="button" id="p5-submit" class="btn btn-primary">Convert Time</button>
+                <button type="button" id="p5-reset" class="btn btn-secondary">Clear</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Output Display Panel -->
+          <div class="card result-panel">
+            <h3 class="panel-heading">Formatted Time Display</h3>
+            <div id="p5-result" class="result-box">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Extension Tasks -->
+        <div class="card extension-card">
+          <div class="extension-header">
+            <span class="extension-badge">Extension Challenges</span>
+            <h3 class="extension-title">Student Extension Challenges</h3>
+          </div>
+          <div class="extension-content">
+            <ol class="extension-list">
+              <li><strong>Days Converter:</strong> Extend the program to calculate days, hours, minutes and seconds.</li>
+              <li><strong>Digital Clock:</strong> Display the result in HH:MM:SS format, for example 01:02:05.</li>
+              <li><strong>Race Timer:</strong> Ask the user to enter three runners' times in seconds and display their times in minutes and seconds.</li>
+              <li><strong>Time Comparison:</strong> Enter two times and determine which is longer.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Demonstrating Integer Division (<code>DIV //</code>) and Modulo Remainder (<code>MOD %</code>) in Programming.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
