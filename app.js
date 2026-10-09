@@ -1,7 +1,10 @@
 /**
  * MOD & DIV in Programming - Interactive Application Engine
- * Demonstrates Integer Division (DIV //) and Modulo Remainder (MOD %)
+ * Demonstrates Integer Division (DIV // in Python, / in C#) and Modulo Remainder (MOD %)
  */
+
+// Global state for selected hint language (Python or C#)
+let currentHintLang = 'python';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Navigation tabs setup
@@ -19,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================================================
-// Hint Toggle System
+// Hint Toggle & Language Switching System
 // ============================================================================
 function initHeaderHint() {
   const btn = document.getElementById('header-hint-toggle');
@@ -65,9 +68,36 @@ window.toggleHint = function(button) {
 };
 
 /**
- * Helper to construct the hint accordion HTML wrapper
+ * Global function to switch between Python and C# in hints
  */
-function renderHintAccordion(hintType, mathBreakdownHTML, isOpen = false) {
+window.switchHintLang = function(lang, button) {
+  currentHintLang = lang;
+
+  // Update tabs within the clicked accordion or across the document
+  const accordion = button ? button.closest('.hint-accordion') : null;
+  const scope = accordion || document;
+
+  scope.querySelectorAll('.hint-lang-btn').forEach(btn => {
+    if (btn.getAttribute('data-lang') === lang) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  scope.querySelectorAll('.hint-lang-panel').forEach(panel => {
+    if (panel.getAttribute('data-lang') === lang) {
+      panel.classList.remove('hidden');
+    } else {
+      panel.classList.add('hidden');
+    }
+  });
+};
+
+/**
+ * Helper to construct the dual-language hint accordion HTML wrapper
+ */
+function renderHintAccordion(hintType, pythonHTML, csharpHTML, isOpen = false) {
   return `
     <div class="hint-accordion">
       <button 
@@ -84,7 +114,32 @@ function renderHintAccordion(hintType, mathBreakdownHTML, isOpen = false) {
         <span class="hint-chevron">▼</span>
       </button>
       <div class="hint-body ${isOpen ? '' : 'hidden'}">
-        ${mathBreakdownHTML}
+        <div class="hint-lang-tabs" role="tablist">
+          <button 
+            type="button" 
+            class="hint-lang-btn ${currentHintLang === 'python' ? 'active' : ''}" 
+            data-lang="python" 
+            onclick="switchHintLang('python', this)"
+          >
+            <span>🐍</span> Python (// &amp; %)
+          </button>
+          <button 
+            type="button" 
+            class="hint-lang-btn ${currentHintLang === 'csharp' ? 'active' : ''}" 
+            data-lang="csharp" 
+            onclick="switchHintLang('csharp', this)"
+          >
+            <span>⚡</span> C# (/ &amp; %)
+          </button>
+        </div>
+
+        <div class="hint-lang-panel ${currentHintLang === 'python' ? '' : 'hidden'}" data-lang="python">
+          ${pythonHTML}
+        </div>
+
+        <div class="hint-lang-panel ${currentHintLang === 'csharp' ? '' : 'hidden'}" data-lang="csharp">
+          ${csharpHTML}
+        </div>
       </div>
     </div>
   `;
@@ -155,26 +210,50 @@ function initProgram1() {
       return;
     }
 
-    // Preserve hint expansion state if user re-runs calculation
     const wasHintOpen = resultBox.querySelector('.btn-hint.active') !== null;
-
-    // In programming: num % 2
-    // If num % 2 === 0, it's even, otherwise odd
     const remainder = Math.abs(num % 2);
     const isEven = remainder === 0;
 
-    const mathBreakdownHTML = `
+    // Python hint content
+    const pythonHTML = `
       <div class="math-breakdown">
-        <div class="math-title">How MOD (%) Solved This</div>
+        <div class="math-title">🐍 Python: Modulo Operator (%)</div>
         <div class="math-steps">
           <div class="math-step-row step-row-mod">
             <span class="step-formula">${num} % 2 = ${remainder}</span>
-            <span class="step-meaning">Modulo operator calculates remainder after division by 2</span>
+            <span class="step-meaning">Modulo returns division remainder</span>
           </div>
           <div class="math-step-row">
-            <span class="step-formula">Condition: remainder === 0</span>
+            <span class="step-formula">Condition: ${num} % 2 == 0</span>
             <span class="step-meaning">${isEven ? 'True &rarr; Divides evenly, number is Even' : 'False &rarr; Remainder is 1, number is Odd'}</span>
           </div>
+        </div>
+        <div class="lang-syntax-note python-note">
+          <span><strong>Python logic:</strong></span>
+          <code>if number % 2 == 0:  # Even</code>
+          <code>else:  # Odd</code>
+        </div>
+      </div>
+    `;
+
+    // C# hint content
+    const csharpHTML = `
+      <div class="math-breakdown">
+        <div class="math-title">⚡ C#: Remainder Operator (%)</div>
+        <div class="math-steps">
+          <div class="math-step-row step-row-mod">
+            <span class="step-formula">${num} % 2 = ${remainder}</span>
+            <span class="step-meaning">Remainder operator returns integer remainder</span>
+          </div>
+          <div class="math-step-row">
+            <span class="step-formula">Condition: if (${num} % 2 == 0)</span>
+            <span class="step-meaning">${isEven ? 'True &rarr; Divides evenly, number is Even' : 'False &rarr; Remainder is 1, number is Odd'}</span>
+          </div>
+        </div>
+        <div class="lang-syntax-note csharp-note">
+          <span><strong>C# logic:</strong></span>
+          <code>if (number % 2 == 0) { /* Even */ }</code>
+          <code>else { /* Odd */ }</code>
         </div>
       </div>
     `;
@@ -208,7 +287,7 @@ function initProgram1() {
         </div>
       </div>
 
-      ${renderHintAccordion('How MOD (%) Works', mathBreakdownHTML, wasHintOpen)}
+      ${renderHintAccordion('How MOD (%) Works', pythonHTML, csharpHTML, wasHintOpen)}
     `;
   }
 
@@ -236,12 +315,12 @@ function initProgram1() {
     });
   });
 
-  // Initial run (hint closed by default)
+  // Initial run
   calculate();
 }
 
 // ============================================================================
-// Program 2: Sharing Sweets (DIV // & MOD %)
+// Program 2: Sharing Sweets (DIV & MOD)
 // ============================================================================
 function initProgram2() {
   const inputSweets = document.getElementById('p2-sweets');
@@ -281,13 +360,12 @@ function initProgram2() {
 
     const wasHintOpen = resultBox.querySelector('.btn-hint.active') !== null;
 
-    // DIV: Sweets per student (Integer quotient)
+    // Quotient & Remainder
     const perStudent = Math.floor(sweets / students);
-    // MOD: Remaining sweets
     const leftover = sweets % students;
     const totalShared = perStudent * students;
 
-    // Build visual sample cards of students (up to 6 previews)
+    // Student preview cards
     const previewCount = Math.min(students, 6);
     let studentPreviewHTML = '';
     for (let i = 1; i <= previewCount; i++) {
@@ -309,22 +387,54 @@ function initProgram2() {
       `;
     }
 
-    const mathBreakdownHTML = `
+    // Python hint content
+    const pythonHTML = `
       <div class="math-breakdown">
-        <div class="math-title">How DIV and MOD Work Together</div>
+        <div class="math-title">🐍 Python: Floor Division (//) &amp; Modulo (%)</div>
         <div class="math-steps">
           <div class="math-step-row step-row-div">
-            <span class="step-formula">DIV (//): ${sweets} // ${students} = ${perStudent}</span>
-            <span class="step-meaning">Whole number quotient: sweets per student</span>
+            <span class="step-formula">DIV: ${sweets} // ${students} = ${perStudent}</span>
+            <span class="step-meaning"><code>//</code> floor division gives whole sweets per student</span>
           </div>
           <div class="math-step-row step-row-mod">
-            <span class="step-formula">MOD (%): ${sweets} % ${students} = ${leftover}</span>
-            <span class="step-meaning">Remainder: sweets left over after fair sharing</span>
+            <span class="step-formula">MOD: ${sweets} % ${students} = ${leftover}</span>
+            <span class="step-meaning"><code>%</code> returns remainder sweets left over for teacher</span>
           </div>
           <div class="math-step-row">
-            <span class="step-formula">Verification: (${perStudent} &times; ${students}) + ${leftover} = ${sweets}</span>
+            <span class="step-formula">Check: (${perStudent} &times; ${students}) + ${leftover} = ${sweets}</span>
             <span class="step-meaning">(Quotient &times; Divisor) + Remainder = Total Sweets</span>
           </div>
+        </div>
+        <div class="lang-syntax-note python-note">
+          <span><strong>Python code:</strong></span>
+          <code>per_student = sweets // students</code>
+          <code>leftover = sweets % students</code>
+        </div>
+      </div>
+    `;
+
+    // C# hint content
+    const csharpHTML = `
+      <div class="math-breakdown">
+        <div class="math-title">⚡ C#: Integer Division (/) &amp; Remainder (%)</div>
+        <div class="math-steps">
+          <div class="math-step-row step-row-div">
+            <span class="step-formula">DIV: ${sweets} / ${students} = ${perStudent}</span>
+            <span class="step-meaning">In C#, dividing two <code>int</code> variables discards fractions</span>
+          </div>
+          <div class="math-step-row step-row-mod">
+            <span class="step-formula">MOD: ${sweets} % ${students} = ${leftover}</span>
+            <span class="step-meaning"><code>%</code> returns remainder sweets left over for teacher</span>
+          </div>
+          <div class="math-step-row">
+            <span class="step-formula">Check: (${perStudent} &times; ${students}) + ${leftover} = ${sweets}</span>
+            <span class="step-meaning">(Quotient &times; Divisor) + Remainder = Total Sweets</span>
+          </div>
+        </div>
+        <div class="lang-syntax-note csharp-note">
+          <span><strong>C# code (with <code>int</code> variables):</strong></span>
+          <code>int perStudent = sweets / students; // integer division</code>
+          <code>int leftover = sweets % students;</code>
         </div>
       </div>
     `;
@@ -342,7 +452,7 @@ function initProgram2() {
         <div class="stat-card">
           <span class="stat-label">Each Student Receives (DIV)</span>
           <span class="stat-value highlight-div">${perStudent}</span>
-          <span class="stat-note">${sweets} // ${students}</span>
+          <span class="stat-note">${sweets} // ${students} (Python) | ${sweets} / ${students} (C#)</span>
         </div>
         <div class="stat-card">
           <span class="stat-label">Remaining Sweets (MOD)</span>
@@ -367,7 +477,7 @@ function initProgram2() {
         </div>
       </div>
 
-      ${renderHintAccordion('How DIV & MOD Work', mathBreakdownHTML, wasHintOpen)}
+      ${renderHintAccordion('How DIV & MOD Work', pythonHTML, csharpHTML, wasHintOpen)}
     `;
   }
 
@@ -390,12 +500,12 @@ function initProgram2() {
     });
   });
 
-  // Initial run (hint closed by default)
+  // Initial run
   calculate();
 }
 
 // ============================================================================
-// Program 3: Car Park Charges (DIV // & MOD %)
+// Program 3: Car Park Charges (DIV & MOD)
 // ============================================================================
 function initProgram3() {
   const inputMinutes = document.getElementById('p3-minutes');
@@ -430,40 +540,68 @@ function initProgram3() {
 
     const wasHintOpen = resultBox.querySelector('.btn-hint.active') !== null;
 
-    // Rules:
-    // Rate: £2 per hour or part of an hour
-    // 0 minutes = £0
-    // 1-60 minutes = £2 (1 hour)
-    // 61-120 minutes = £4 (2 hours)
-    // Extra part of hour charged as full hour
     let fullHours = 0;
     let extraMinutes = 0;
     let chargeableHours = 0;
     let totalCharge = 0;
 
     if (minutes > 0) {
-      fullHours = Math.floor(minutes / 60); // DIV
-      extraMinutes = minutes % 60;          // MOD
+      fullHours = Math.floor(minutes / 60);
+      extraMinutes = minutes % 60;
       chargeableHours = fullHours + (extraMinutes > 0 ? 1 : 0);
       totalCharge = chargeableHours * 2;
     }
 
-    const mathBreakdownHTML = `
+    // Python hint content
+    const pythonHTML = `
       <div class="math-breakdown">
-        <div class="math-title">How DIV &amp; MOD Applied The Parking Rules</div>
+        <div class="math-title">🐍 Python: Hourly Blocks with // and %</div>
         <div class="math-steps">
           <div class="math-step-row step-row-div">
-            <span class="step-formula">DIV (//): ${minutes} // 60 = ${fullHours} full hour${fullHours === 1 ? '' : 's'}</span>
-            <span class="step-meaning">Integer division isolates completed 60-minute blocks</span>
+            <span class="step-formula">DIV: ${minutes} // 60 = ${fullHours} full hour${fullHours === 1 ? '' : 's'}</span>
+            <span class="step-meaning">Floor division isolates completed 60-minute blocks</span>
           </div>
           <div class="math-step-row step-row-mod">
-            <span class="step-formula">MOD (%): ${minutes} % 60 = ${extraMinutes} extra minute${extraMinutes === 1 ? '' : 's'}</span>
-            <span class="step-meaning">Modulo reveals leftover minutes exceeding whole hours</span>
+            <span class="step-formula">MOD: ${minutes} % 60 = ${extraMinutes} extra minute${extraMinutes === 1 ? '' : 's'}</span>
+            <span class="step-meaning">Modulo reveals leftover minutes that trigger another hour</span>
           </div>
           <div class="math-step-row">
-            <span class="step-formula">Rule Check: ${extraMinutes > 0 ? `${extraMinutes} mins > 0 &rarr; adds 1 full chargeable hour` : '0 remainder &rarr; no extra hour'}</span>
+            <span class="step-formula">Rule: ${extraMinutes > 0 ? `${extraMinutes}m > 0 &rarr; adds 1 full chargeable hour` : '0 remainder &rarr; no extra hour'}</span>
             <span class="step-meaning">${chargeableHours} hours &times; &pound;2.00 = &pound;${totalCharge.toFixed(2)}</span>
           </div>
+        </div>
+        <div class="lang-syntax-note python-note">
+          <span><strong>Python logic:</strong></span>
+          <code>full_hours = minutes // 60</code>
+          <code>extra_minutes = minutes % 60</code>
+          <code>billed_hours = full_hours + (1 if extra_minutes > 0 else 0)</code>
+        </div>
+      </div>
+    `;
+
+    // C# hint content
+    const csharpHTML = `
+      <div class="math-breakdown">
+        <div class="math-title">⚡ C#: Hourly Blocks with / and %</div>
+        <div class="math-steps">
+          <div class="math-step-row step-row-div">
+            <span class="step-formula">DIV: ${minutes} / 60 = ${fullHours} full hour${fullHours === 1 ? '' : 's'}</span>
+            <span class="step-meaning">Integer division (<code>int / 60</code>) isolates completed 60-min blocks</span>
+          </div>
+          <div class="math-step-row step-row-mod">
+            <span class="step-formula">MOD: ${minutes} % 60 = ${extraMinutes} extra minute${extraMinutes === 1 ? '' : 's'}</span>
+            <span class="step-meaning">Remainder operator gives leftover minutes</span>
+          </div>
+          <div class="math-step-row">
+            <span class="step-formula">Rule: ${extraMinutes > 0 ? `${extraMinutes}m > 0 &rarr; adds 1 full chargeable hour` : '0 remainder &rarr; no extra hour'}</span>
+            <span class="step-meaning">${chargeableHours} hours &times; &pound;2.00 = &pound;${totalCharge.toFixed(2)}</span>
+          </div>
+        </div>
+        <div class="lang-syntax-note csharp-note">
+          <span><strong>C# logic:</strong></span>
+          <code>int fullHours = minutes / 60; // integer division</code>
+          <code>int extraMinutes = minutes % 60;</code>
+          <code>int billedHours = fullHours + (extraMinutes > 0 ? 1 : 0);</code>
         </div>
       </div>
     `;
@@ -506,7 +644,7 @@ function initProgram3() {
         </div>
       </div>
 
-      ${renderHintAccordion('How DIV & MOD Work', mathBreakdownHTML, wasHintOpen)}
+      ${renderHintAccordion('How DIV & MOD Work', pythonHTML, csharpHTML, wasHintOpen)}
     `;
   }
 
@@ -532,12 +670,12 @@ function initProgram3() {
     });
   });
 
-  // Initial run (hint closed by default)
+  // Initial run
   calculate();
 }
 
 // ============================================================================
-// Program 4: ATM Cash Dispenser (DIV // & MOD %)
+// Program 4: ATM Cash Dispenser (DIV & MOD)
 // ============================================================================
 function initProgram4() {
   const inputAmount = document.getElementById('p4-amount');
@@ -570,7 +708,7 @@ function initProgram4() {
       return;
     }
 
-    // Check if divisible by £5 (the smallest available denomination)
+    // Check if divisible by £5
     if (amount % 5 !== 0) {
       const lowerMultiple = Math.floor(amount / 5) * 5;
       const upperMultiple = lowerMultiple + 5;
@@ -589,24 +727,22 @@ function initProgram4() {
 
     const wasHintOpen = resultBox.querySelector('.btn-hint.active') !== null;
 
-    // Greedy banknote dispensing using DIV and MOD
-    // Step 1: £20 notes
+    // Greedy banknote dispensing
     const notes20 = Math.floor(amount / 20);
     const remAfter20 = amount % 20;
 
-    // Step 2: £10 notes from remaining
     const notes10 = Math.floor(remAfter20 / 10);
     const remAfter10 = remAfter20 % 10;
 
-    // Step 3: £5 notes from remaining
     const notes5 = Math.floor(remAfter10 / 5);
     const finalRem = remAfter10 % 5;
 
     const totalNotes = notes20 + notes10 + notes5;
 
-    const mathBreakdownHTML = `
+    // Python hint content
+    const pythonHTML = `
       <div class="math-breakdown">
-        <div class="math-title">Step-by-Step DIV and MOD Cascade</div>
+        <div class="math-title">🐍 Python: Greedy Cascade with // and %</div>
         <div class="math-steps">
           <div class="math-step-row step-row-div">
             <span class="step-formula">Step 1: ${amount} // 20 = ${notes20} (&pound;20 notes)</span>
@@ -618,8 +754,41 @@ function initProgram4() {
           </div>
           <div class="math-step-row step-row-div">
             <span class="step-formula">Step 3: ${remAfter10} // 5 = ${notes5} (&pound;5 notes)</span>
-            <span class="step-meaning">Remainder: ${remAfter10} % 5 = &pound;${finalRem} (dispense complete)</span>
+            <span class="step-meaning">Remainder: ${remAfter10} % 5 = &pound;${finalRem} (dispensed)</span>
           </div>
+        </div>
+        <div class="lang-syntax-note python-note">
+          <span><strong>Python logic:</strong></span>
+          <code>notes_20 = amount // 20; rem = amount % 20</code>
+          <code>notes_10 = rem // 10; rem = rem % 10</code>
+          <code>notes_5 = rem // 5</code>
+        </div>
+      </div>
+    `;
+
+    // C# hint content
+    const csharpHTML = `
+      <div class="math-breakdown">
+        <div class="math-title">⚡ C#: Greedy Cascade with / and %</div>
+        <div class="math-steps">
+          <div class="math-step-row step-row-div">
+            <span class="step-formula">Step 1: ${amount} / 20 = ${notes20} (&pound;20 notes)</span>
+            <span class="step-meaning">Remainder: ${amount} % 20 = &pound;${remAfter20} left</span>
+          </div>
+          <div class="math-step-row step-row-mod">
+            <span class="step-formula">Step 2: ${remAfter20} / 10 = ${notes10} (&pound;10 notes)</span>
+            <span class="step-meaning">Remainder: ${remAfter20} % 10 = &pound;${remAfter10} left</span>
+          </div>
+          <div class="math-step-row step-row-div">
+            <span class="step-formula">Step 3: ${remAfter10} / 5 = ${notes5} (&pound;5 notes)</span>
+            <span class="step-meaning">Remainder: ${remAfter10} % 5 = &pound;${finalRem} (dispensed)</span>
+          </div>
+        </div>
+        <div class="lang-syntax-note csharp-note">
+          <span><strong>C# logic:</strong></span>
+          <code>int notes20 = amount / 20; int rem = amount % 20;</code>
+          <code>int notes10 = rem / 10; rem = rem % 10;</code>
+          <code>int notes5 = rem / 5;</code>
         </div>
       </div>
     `;
@@ -653,7 +822,7 @@ function initProgram4() {
         </div>
       </div>
 
-      ${renderHintAccordion('How DIV & MOD Work', mathBreakdownHTML, wasHintOpen)}
+      ${renderHintAccordion('How DIV & MOD Work', pythonHTML, csharpHTML, wasHintOpen)}
     `;
   }
 
@@ -679,12 +848,12 @@ function initProgram4() {
     });
   });
 
-  // Initial run (hint closed by default)
+  // Initial run
   calculate();
 }
 
 // ============================================================================
-// Program 5: Time Converter (DIV // & MOD %)
+// Program 5: Time Converter (DIV & MOD)
 // ============================================================================
 function initProgram5() {
   const inputSeconds = document.getElementById('p5-seconds');
@@ -719,37 +888,64 @@ function initProgram5() {
 
     const wasHintOpen = resultBox.querySelector('.btn-hint.active') !== null;
 
-    // 1 hour = 3600 seconds
-    // 1 minute = 60 seconds
     const hours = Math.floor(totalSeconds / 3600);
     const remAfterHours = totalSeconds % 3600;
 
     const minutes = Math.floor(remAfterHours / 60);
     const seconds = remAfterHours % 60;
 
-    // Pad numbers for digital clock format
     const pad = (n) => String(n).padStart(2, '0');
 
-    const mathBreakdownHTML = `
+    // Python hint content
+    const pythonHTML = `
       <div class="math-breakdown">
-        <div class="math-title">How DIV (//) &amp; MOD (%) Converted The Time</div>
+        <div class="math-title">🐍 Python: Time Conversion with // and %</div>
         <div class="math-steps">
           <div class="math-step-row step-row-div">
-            <span class="step-formula">DIV (//): ${totalSeconds} // 3600 = ${hours} hour${hours === 1 ? '' : 's'}</span>
-            <span class="step-meaning">Calculates whole hours (3600s in an hour)</span>
+            <span class="step-formula">Hours: ${totalSeconds} // 3600 = ${hours}h</span>
+            <span class="step-meaning">Remainder: ${totalSeconds} % 3600 = ${remAfterHours}s</span>
           </div>
           <div class="math-step-row step-row-mod">
-            <span class="step-formula">MOD (%): ${totalSeconds} % 3600 = ${remAfterHours} seconds remaining</span>
-            <span class="step-meaning">Isolates seconds left over after whole hours</span>
+            <span class="step-formula">Minutes: ${remAfterHours} // 60 = ${minutes}m</span>
+            <span class="step-meaning">Remainder: ${remAfterHours} % 60 = ${seconds}s</span>
           </div>
-          <div class="math-step-row step-row-div">
-            <span class="step-formula">DIV (//): ${remAfterHours} // 60 = ${minutes} minute${minutes === 1 ? '' : 's'}</span>
-            <span class="step-meaning">Calculates whole minutes from remaining seconds</span>
-          </div>
-          <div class="math-step-row step-row-mod">
-            <span class="step-formula">MOD (%): ${remAfterHours} % 60 = ${seconds} second${seconds === 1 ? '' : 's'}</span>
+          <div class="math-step-row">
+            <span class="step-formula">Seconds: ${seconds}s</span>
             <span class="step-meaning">Final remainder gives exact seconds</span>
           </div>
+        </div>
+        <div class="lang-syntax-note python-note">
+          <span><strong>Python logic:</strong></span>
+          <code>hours = total_seconds // 3600</code>
+          <code>minutes = (total_seconds % 3600) // 60</code>
+          <code>seconds = total_seconds % 60</code>
+        </div>
+      </div>
+    `;
+
+    // C# hint content
+    const csharpHTML = `
+      <div class="math-breakdown">
+        <div class="math-title">⚡ C#: Time Conversion with / and %</div>
+        <div class="math-steps">
+          <div class="math-step-row step-row-div">
+            <span class="step-formula">Hours: ${totalSeconds} / 3600 = ${hours}h</span>
+            <span class="step-meaning">Remainder: ${totalSeconds} % 3600 = ${remAfterHours}s</span>
+          </div>
+          <div class="math-step-row step-row-mod">
+            <span class="step-formula">Minutes: ${remAfterHours} / 60 = ${minutes}m</span>
+            <span class="step-meaning">Remainder: ${remAfterHours} % 60 = ${seconds}s</span>
+          </div>
+          <div class="math-step-row">
+            <span class="step-formula">Seconds: ${seconds}s</span>
+            <span class="step-meaning">Final remainder gives exact seconds</span>
+          </div>
+        </div>
+        <div class="lang-syntax-note csharp-note">
+          <span><strong>C# logic:</strong></span>
+          <code>int hours = totalSeconds / 3600;</code>
+          <code>int minutes = (totalSeconds % 3600) / 60;</code>
+          <code>int seconds = totalSeconds % 60;</code>
         </div>
       </div>
     `;
@@ -776,12 +972,12 @@ function initProgram5() {
         <div class="stat-card">
           <span class="stat-label">Hours (DIV)</span>
           <span class="stat-value highlight-div">${hours}h</span>
-          <span class="stat-note">${totalSeconds} // 3600</span>
+          <span class="stat-note">${totalSeconds} // 3600 (Py) | ${totalSeconds} / 3600 (C#)</span>
         </div>
         <div class="stat-card">
           <span class="stat-label">Minutes (DIV)</span>
           <span class="stat-value highlight-div">${minutes}m</span>
-          <span class="stat-note">${remAfterHours} // 60</span>
+          <span class="stat-note">${remAfterHours} // 60 (Py) | ${remAfterHours} / 60 (C#)</span>
         </div>
         <div class="stat-card">
           <span class="stat-label">Seconds (MOD)</span>
@@ -790,7 +986,7 @@ function initProgram5() {
         </div>
       </div>
 
-      ${renderHintAccordion('How DIV & MOD Work', mathBreakdownHTML, wasHintOpen)}
+      ${renderHintAccordion('How DIV & MOD Work', pythonHTML, csharpHTML, wasHintOpen)}
     `;
   }
 
@@ -816,6 +1012,6 @@ function initProgram5() {
     });
   });
 
-  // Initial run (hint closed by default)
+  // Initial run
   calculate();
 }
